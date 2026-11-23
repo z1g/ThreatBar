@@ -1,0 +1,2 @@
+# Screenshots live on the GitHub release, not in the addon tree.
+*.png export-ignore
