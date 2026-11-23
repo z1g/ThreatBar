@@ -12,7 +12,7 @@ EllesmereUI already ships a full group threat meter. Keep that. This is the extr
 
 Forever does not give addons `COMBAT_LOG_EVENT`. The bar reads `UnitDetailedThreatSituation("player", "target")` and colours with `GetThreatStatusColor`.
 
-![shardorb]tbar.png
+![shardorb](tbar.png)
 
 ## Install
 
