@@ -12,9 +12,11 @@
 
 local PREFIX = "|cff0cd29fThreatBar|r: "
 local WHITE = "Interface\\Buttons\\WHITE8X8"
+local SCREAM_FILE = "Interface\\AddOns\\ThreatBar\\wilhelm.ogg"
 local MIN_W, MIN_H, MAX_W, MAX_H = 80, 8, 600, 48
 local DEFAULT_W, DEFAULT_H = 260, 18
 local TICK = 0.2
+local SCREAM_CD = 4
 
 ThreatBarDB = ThreatBarDB or {}
 
@@ -23,6 +25,8 @@ local aggR, aggG, aggB, lowR, lowG, lowB
 local testUntil = 0
 local testPct = 80
 local elapsed = 0
+local screamWasHot = false
+local screamAt = 0
 
 local function Secret(v)
   return v ~= nil and issecretvalue and issecretvalue(v)
@@ -47,6 +51,7 @@ local function Defaults()
   if ThreatBarDB.shown == nil then ThreatBarDB.shown = true end
   if ThreatBarDB.displayText == nil then ThreatBarDB.displayText = true end
   if ThreatBarDB.hideOutOfCombat == nil then ThreatBarDB.hideOutOfCombat = true end
+  if ThreatBarDB.scream == nil then ThreatBarDB.scream = true end
   ThreatBarDB.width = math.max(MIN_W, math.min(MAX_W, tonumber(ThreatBarDB.width) or DEFAULT_W))
   ThreatBarDB.height = math.max(MIN_H, math.min(MAX_H, tonumber(ThreatBarDB.height) or DEFAULT_H))
 end
@@ -187,6 +192,50 @@ local function Testing()
   return testUntil > 0 and GetTime() < testUntil
 end
 
+-- Status 1 = not tanking, higher threat than the current tank (about to pull).
+-- Status 3 / isTanking = you already have aggro (solo or tanking) — stay quiet.
+local function IsTankingUs(isTanking)
+  if not Readable(isTanking) then return nil end
+  return isTanking == true or isTanking == 1
+end
+
+local function OtherPlayerOrPetHasAggro()
+  if not UnitExists("targettarget") then return false end
+  local okU, same = pcall(function()
+    return UnitIsUnit and UnitIsUnit("targettarget", "player")
+  end)
+  if okU and same then return false end
+  local okP, isP = pcall(UnitIsPlayer, "targettarget")
+  if okP and isP == true then return true end
+  local okC, isC = pcall(UnitPlayerControlled, "targettarget")
+  if okC and isC == true then return true end
+  return false
+end
+
+local function PlayWilhelm()
+  if not pcall(PlaySoundFile, SCREAM_FILE, "Master") then
+    pcall(PlaySoundFile, SCREAM_FILE)
+  end
+end
+
+local function MaybeScream(isTanking, status)
+  if ThreatBarDB.scream == false then
+    screamWasHot = false
+    return
+  end
+  local aboutToPull = (IsTankingUs(isTanking) == false)
+    and Readable(status) and type(status) == "number" and status == 1
+    and OtherPlayerOrPetHasAggro()
+  if aboutToPull and not screamWasHot then
+    local now = GetTime()
+    if now - screamAt >= SCREAM_CD then
+      screamAt = now
+      PlayWilhelm()
+    end
+  end
+  screamWasHot = aboutToPull and true or false
+end
+
 local function ShouldShow(hasThreat)
   if ThreatBarDB.shown == false then return false end
   if not ThreatBarDB.locked or Testing() then return true end
@@ -254,6 +303,7 @@ local function Update()
     return
   end
   Paint(pct, status, isTanking, hasThreat)
+  MaybeScream(isTanking, status)
 end
 
 local function BuildFrame()
@@ -450,6 +500,16 @@ SlashCmdList.THREATBAR = function(msg)
     Print("test at 80%% for 10 seconds — place it on the cast bar, then /threatbar lock.")
     return
   end
+  if msg == "scream test" then
+    PlayWilhelm()
+    Print("scream test. file=%s", SCREAM_FILE)
+    return
+  end
+  if msg == "scream" then
+    ThreatBarDB.scream = not (ThreatBarDB.scream ~= false)
+    Print(ThreatBarDB.scream and "pull scream on." or "pull scream off.")
+    return
+  end
   if msg == "reset" then
     ThreatBarDB.point, ThreatBarDB.relPoint, ThreatBarDB.x, ThreatBarDB.y = nil, nil, nil, nil
     ThreatBarDB.width, ThreatBarDB.height = DEFAULT_W, DEFAULT_H
@@ -468,5 +528,7 @@ SlashCmdList.THREATBAR = function(msg)
   Print("/threatbar test   — show 80%% for 10s so you can place it")
   Print("/threatbar text   — toggle percent text")
   Print("/threatbar combat — toggle hide-out-of-combat")
+  Print("/threatbar scream — toggle Wilhelm when you are about to pull")
+  Print("/threatbar scream test — play wilhelm.ogg")
   Print("/threatbar reset  — default size and position")
 end

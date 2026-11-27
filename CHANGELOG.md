@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- Wilhelm scream (`wilhelm.ogg`) when you are about to pull aggro off another player or pet (`threat status == 1`, targettarget is a player/pet, you are not tanking)
+- Does not play when you already have aggro (soloing or tanking)
+- `/threatbar scream` toggle, `/threatbar scream test`
+
 ## 1.0.0
 
 - Player-only threat data bar for WoW Forever (`Interface 16001`)

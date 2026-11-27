@@ -16,12 +16,12 @@ Forever does not give addons `COMBAT_LOG_EVENT`. The bar reads `UnitDetailedThre
 
 ## Install
 
-1. Download the repo (Code → Download ZIP) or clone it.
+1. Download **ThreatBar.zip** from the [latest release](https://github.com/z1g/ThreatBar/releases/latest). Do **not** use GitHub's Source code (zip).
 2. Put the **`ThreatBar` folder** (the one that contains `ThreatBar.toc`) into:
 
    `_forever_/Interface/AddOns/ThreatBar/`
 
-3. **Quit the client fully.** A new `.toc` does not load on `/reload`.
+3. **Quit the client fully.** A new `.toc` or a new `.ogg` does not load on `/reload`.
 4. Enable **ThreatBar** on the character addon list.
 
 ## Place it on the cast bar
@@ -41,7 +41,11 @@ Unlocked, the bar stays on screen even with no threat so you can move it. Locked
 | `/threatbar test` | 80% preview for 10 seconds |
 | `/threatbar text` | percent text on/off |
 | `/threatbar combat` | hide out of combat (on by default) |
+| `/threatbar scream` | Wilhelm scream when you are about to pull off another player/pet |
+| `/threatbar scream test` | play `wilhelm.ogg` |
 | `/threatbar reset` | default size and position |
+
+Drop `wilhelm.ogg` next to `ThreatBar.lua`. Forever needs **`.ogg`**, not `.wav`. A new sound file while the client is running needs a full quit. The scream is a **rising edge**: you do not have aggro, a player or pet does (`targettarget`), and Blizzard threat status is `1` (higher than the tank, not yet tanking). Solo / you-are-the-tank stays quiet. `/threatbar scream` turns it off.
 
 `/threatbar` hide is not the same as combat-only. Hide means it never appears, even in combat, until you toggle it back.
 
@@ -59,6 +63,7 @@ This is **your** threat on **your current target** only. It does not list the ra
 ThreatBar/
   ThreatBar.toc
   ThreatBar.lua
+  wilhelm.ogg
   README.md
   LICENSE
   CHANGELOG.md

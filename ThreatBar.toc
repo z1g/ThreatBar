@@ -2,7 +2,7 @@
 ## Title: ThreatBar
 ## Notes: Player-only threat data bar (ElvUI-style). Park it on your cast bar.
 ## Author: Chicken
-## Version: 1.0.0
+## Version: 1.0.1
 ## License: MIT
 ## SavedVariables: ThreatBarDB
 ## OptionalDeps: EllesmereUI
