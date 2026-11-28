@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- `/tbar wilhelm` toggles the pull scream (on by default). `/tbar wilhelm test` plays it. `/threatbar scream` still works.
+
 ## 1.0.1
 
 - Wilhelm scream (`wilhelm.ogg`) when you are about to pull aggro off another player or pet (`threat status == 1`, targettarget is a player/pet, you are not tanking)

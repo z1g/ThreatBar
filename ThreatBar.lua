@@ -500,14 +500,14 @@ SlashCmdList.THREATBAR = function(msg)
     Print("test at 80%% for 10 seconds — place it on the cast bar, then /threatbar lock.")
     return
   end
-  if msg == "scream test" then
+  if msg == "scream test" or msg == "wilhelm test" then
     PlayWilhelm()
     Print("scream test. file=%s", SCREAM_FILE)
     return
   end
-  if msg == "scream" then
+  if msg == "scream" or msg == "wilhelm" then
     ThreatBarDB.scream = not (ThreatBarDB.scream ~= false)
-    Print(ThreatBarDB.scream and "pull scream on." or "pull scream off.")
+    Print(ThreatBarDB.scream and "Wilhelm on." or "Wilhelm off.")
     return
   end
   if msg == "reset" then
@@ -528,7 +528,7 @@ SlashCmdList.THREATBAR = function(msg)
   Print("/threatbar test   — show 80%% for 10s so you can place it")
   Print("/threatbar text   — toggle percent text")
   Print("/threatbar combat — toggle hide-out-of-combat")
-  Print("/threatbar scream — toggle Wilhelm when you are about to pull")
-  Print("/threatbar scream test — play wilhelm.ogg")
+  Print("/tbar wilhelm      — toggle Wilhelm (on by default)")
+  Print("/tbar wilhelm test — play wilhelm.ogg")
   Print("/threatbar reset  — default size and position")
 end

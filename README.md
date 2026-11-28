@@ -41,11 +41,11 @@ Unlocked, the bar stays on screen even with no threat so you can move it. Locked
 | `/threatbar test` | 80% preview for 10 seconds |
 | `/threatbar text` | percent text on/off |
 | `/threatbar combat` | hide out of combat (on by default) |
-| `/threatbar scream` | Wilhelm scream when you are about to pull off another player/pet |
-| `/threatbar scream test` | play `wilhelm.ogg` |
+| `/tbar wilhelm` | toggle Wilhelm scream (on by default) |
+| `/tbar wilhelm test` | play `wilhelm.ogg` |
 | `/threatbar reset` | default size and position |
 
-Drop `wilhelm.ogg` next to `ThreatBar.lua`. Forever needs **`.ogg`**, not `.wav`. A new sound file while the client is running needs a full quit. The scream is a **rising edge**: you do not have aggro, a player or pet does (`targettarget`), and Blizzard threat status is `1` (higher than the tank, not yet tanking). Solo / you-are-the-tank stays quiet. `/threatbar scream` turns it off.
+Drop `wilhelm.ogg` next to `ThreatBar.lua`. Forever needs **`.ogg`**, not `.wav`. A new sound file while the client is running needs a full quit. The scream is a **rising edge**: you do not have aggro, a player or pet does (`targettarget`), and Blizzard threat status is `1` (higher than the tank, not yet tanking). Solo / you-are-the-tank stays quiet. `/tbar wilhelm` turns it off (defaults to on).
 
 `/threatbar` hide is not the same as combat-only. Hide means it never appears, even in combat, until you toggle it back.
 
